@@ -90,11 +90,10 @@ exports.patchToggleTaskStatus = async (req, res, next) => {
       return next(error);
     }
 
-    const newTask = await Task.findByIdAndUpdate(id, {
-      completed: !task.completed,
-    });
+    task.completed = !task.completed;
+    await task.save();
 
-    res.status(200).json({ task: newTask });
+    res.status(200).json({ task });
   } catch (err) {
     console.log(err);
     const error = errorUtil.handle500Error();
